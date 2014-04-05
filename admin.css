@@ -1,0 +1,33 @@
+/* Metabox Styles */
+table.critique-review-inputs{
+	width:100%;
+}
+td.critique-admin-raw-value{
+	min-width:50px;
+}
+td.critique-admin-raw-value input{
+	width:100%;
+}
+td.critique-metabox-scale{
+	width:100%;
+}
+/* Review scale specific Metabox Styles */
+td.critique-metabox-scale{
+	text-align:center;
+}
+td.critique-metabox-scale.type-5-stars .critique-admin-star-container{
+	font-size:17px;
+}
+tr.overall-average-line{
+	opacity: .8
+}
+td.critique-metabox-scale.type-out-of-100 .critique-admin-of100-bar{
+	height:20px;
+	background: #dfdfdf;
+	border-radius:2px;
+}
+td.critique-metabox-scale.type-out-of-100 .critique-admin-of100-bar div{
+	background: #333;
+	height:100%;
+	border-radius:2px;
+}
