@@ -2,8 +2,8 @@
 Contributors: Phillip.Gooch
 Tags: reviews, scores, grades
 Requires at least: 3.4
-Tested up to: 3.8.1
-Stable tag: 1.0.0 - Ashworth Ave
+Tested up to: 3.9
+Stable tag: 1.1.1
 License: GNU General Public License v2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -39,9 +39,19 @@ Probably, let me know and I'll see if I can work it in there.
 
 == Screenshots ==
 
-1. The backdrop management page.
+1. The Critique settings page.
+2. The 5-Star Metabox.
+3. The 5-Star Display.
+4. The #/100 Metabox.
+5. The Default #/100 display.
 
 == Changelog ==
 
-#### 1.0.0 - Ashworth Ave
+#### 1.1.1
+ + Added the ability to have critique activate on any post_type with a UI enabled.
+ + Added a nowrap on the metabox score cell.
+ + Fixed a bug that would cause "0" to appear as the review section when no sections were set.
+ + Fixed a bug where removing a section from the list would prevent it from being edited on older reviews.
+ + Removed the version names since the WP site no longer seems to handle them properly.
+#### 1.0.0
  + Initial Release

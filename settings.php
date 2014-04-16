@@ -3,34 +3,21 @@
 	<h2>Critique Settings</h2>           
 	<form method="post" action="">
 		<input type="hidden" name="critique_action" value="critique_update" />
-
 		<h3 class="title">Active Post Types</h3>
 		<table class="form-table">
 			<p class="description">After enabling Critique in a post type you may need to go to your Screen Options and select it to be displayed. If you disable critique from a post type preview reviews from that type will no longer be shown.</p>
 			<tr valign="top">
-				<th scope="row">Enable in Posts</th>
+				<th scope="row">Enable in Posts Types</th>
 				<td>
-					<fieldset>
-						<legend class="screen-reader-text"><span>Enable in Posts</span></legend>
-						<label for="post_types[post]">
-							<input type="hidden" name="post_types[post]" value="off" />
-							<input name="post_types[post]" type="checkbox" id="post_types[post]" value="on" <?= ($this->settings['post_types']['post']=='on'?'checked':'') ?> >
-							Enable critique in blog posts and feeds.
+					<p class="description">Critique can be enabled in any of the following post types with user interfaces.</p>
+					<?php $post_types = get_post_types(array('show_ui'=>true),'objects');
+					foreach($post_types as $name => $data){ ?>
+						<label for="post_types[<?= $name ?>]" class="one_fifth">
+							<input type="hidden" name="post_types[<?= $name ?>]" value="off" />
+							<input name="post_types[<?= $name ?>]" type="checkbox" id="post_types[<?= $name ?>]" value="on" <?= ($this->settings['post_types'][$name]=='on'?'checked':'') ?> >
+							<?= $data->labels->name ?>
 						</label>
-					</fieldset>
-				</td>
-			</tr>
-			<tr valign="top">
-				<th scope="row">Enable in Pages</th>
-				<td>
-					<fieldset>
-						<legend class="screen-reader-text"><span>Enable in Posts</span></legend>
-						<label for="post_types[page]">
-							<input type="hidden" name="post_types[page]" value="off" />
-							<input name="post_types[page]" type="checkbox" id="post_types[page]" value="on" <?= ($this->settings['post_types']['page']=='on'?'checked':'') ?> >
-							Enable critique in static pages (and feeds of pages).
-						</label>
-					</fieldset>
+					<?php } ?>
 				</td>
 			</tr>
 		</table>

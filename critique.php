@@ -3,7 +3,7 @@
 Plugin Name: Critique
 Plugin URI: http://fatfolderdesign.com/critique/
 Description: Critique is a simple review platform with the power to do what you need.
-Version: 1.0.0 - Ashworth Ave
+Version: 1.1.1
 Author: Phillip Gooch
 Author URI: mailto:phillip.gooch@gmail.com
 License: Undecided
@@ -36,6 +36,7 @@ class critique {
 			'post_types' => array(
 				'post' => 'on',
 				'page' => 'off',
+				'attachment' => 'off',
 			),
 			'scale' => '10-stars',
 			'sections' => '',
@@ -47,6 +48,7 @@ class critique {
 				'overall_in_short' => 'on',
 			),
 		),(array)$settings);
+		// Check any settings that need to be overridden (for whatever reason notes)
 		$this->settings = $settings;
 		// Add the settings menu item
 		add_action('admin_menu',array($this,'add_menu_item'));
@@ -58,6 +60,7 @@ class critique {
 		add_action('add_meta_boxes',array($this,'init_metabox'));
 		// This action will save the critique metabox data (IE the score)
 		add_action('save_post',array($this,'save_metabox'));
+		add_action('edit_attachment',array($this,'save_metabox'));
 		// These filters are used to add the critique data to the post 
 		add_filter('the_content',array($this,'add_to_post'));
 		add_filter('the_content_more_link',array($this,'post_more_link'),9001);
@@ -118,6 +121,19 @@ class critique {
 		}
 		// Determine what sections we are going to add
 		$sections = explode(',',$settings['sections']);
+		// Look through all the sections, trimming each one
+		foreach($sections as $n => $section){
+			$sections[$n] = trim($section);
+		}
+		// Look through the saved scorebox, if it contains a missing section not in $sections add it
+		if(is_array($saved_scorebox['review'])){
+			foreach($saved_scorebox['review'] as $section => $score){
+				if(!in_array($section,$sections)){
+					$sections[] = $section;
+				}
+			}
+		}
+		// Id the sections were blank were going to add a blank one in
 		$overal_average_added = false;
 		if(count($sections)>1 && $settings['add_average']=='on'){
 			$overal_average_added = true;
@@ -149,9 +165,11 @@ class critique {
 					// If there is a section title, display it, otherwise it's an uneeded element
 					if(trim($section)!=''){
 						echo '<th>'.$section.'</th>';
+					}else{ // If the section is blank then set it to the $n so it can still load the score (but no need for the th)
+						$section = $n;
 					}
 					// Determine which input to display in the ratebox
-					echo '<td class="critique-metabox-scale type-'.$settings['scale'].'">';
+					echo '<td class="critique-metabox-scale type-'.$settings['scale'].'" nowrap>';
 						switch($settings['scale']){
 							case '5-stars':
 								echo '<div class="critique-admin-star-container">';
@@ -198,7 +216,7 @@ class critique {
 		// This adds the display block to the post
 		// First, load the data (and skip everything else if it's not there) and add the overall average is settings dictate
     	$critique = json_decode(get_post_meta(get_the_ID(),'critique_score',true),true);
-			// Determine the overall if enabled and add if it is
+		// Determine the overall if enabled and add if it is
  		if($this->settings['add_average']=='on'&&count($critique['review'])>1){
  			$total_score = 0;
  			foreach($critique['review'] as $section => $score){
@@ -251,7 +269,7 @@ class critique {
 					<ul id="critique-display">
 						<?php foreach($critique['review'] as $scale => $value){ ?>
 							<li class="critique-row">
-								<span class="critique-title"><?= trim($scale) ?></span>
+								<span class="critique-title"><?= trim(($scale=='0'?'':$scale)) ?></span>
 								<span class="critique-scale">
 									<?php switch($critique['scale']){
 										case '5-stars':
