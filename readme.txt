@@ -2,8 +2,8 @@
 Contributors: Phillip.Gooch
 Tags: reviews, scores, grades
 Requires at least: 3.4
-Tested up to: 3.9
-Stable tag: 1.1.1
+Tested up to: 4.0
+Stable tag: 1.1.2
 License: GNU General Public License v2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -47,6 +47,8 @@ Probably, let me know and I'll see if I can work it in there.
 
 == Changelog ==
 
+#### 1.1.2
+ + Fixed a bug that would cause HTML to show on page if the short post had to more link.
 #### 1.1.1
  + Added the ability to have critique activate on any post_type with a UI enabled.
  + Added a nowrap on the metabox score cell.

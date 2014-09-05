@@ -309,7 +309,11 @@ class critique {
 				if($post_type=='long'){
 					$post .= $critique_block;
 				}else{ // $post_type == short
-					$post = substr_replace($post,$critique_block,($this->more_link_length*-1),0);
+					if($this->more_link_length==-1){
+						$post .= $critique_block;
+					}else{
+						$post = substr_replace($post,$critique_block,($this->more_link_length*-1),0);
+					}
 				}
 			}
  		}
