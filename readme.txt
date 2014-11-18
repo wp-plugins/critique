@@ -3,7 +3,7 @@ Contributors: Phillip.Gooch
 Tags: reviews, scores, grades
 Requires at least: 3.4
 Tested up to: 4.0
-Stable tag: 1.1.2
+Stable tag: 1.1.3
 License: GNU General Public License v2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -47,6 +47,10 @@ Probably, let me know and I'll see if I can work it in there.
 
 == Changelog ==
 
+#### 1.1.3
+ + Fixed a bug that would cause extra backslashes in the style and script paths (although style and scripts still loaded properly).
+ + Added pointer styles to the admin side review selection boxes to make it more appeant you can click on them to select a score.
+ + _There is currently an issue with the admin scripts not loading while using this script with my "auto-seo" script, this issue is caused by auto-seo and an update will be pushed to that plugin fixing the issue soon._
 #### 1.1.2
  + Fixed a bug that would cause HTML to show on page if the short post had to more link.
 #### 1.1.1
