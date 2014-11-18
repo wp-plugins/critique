@@ -3,7 +3,7 @@
 Plugin Name: Critique
 Plugin URI: http://fatfolderdesign.com/critique/
 Description: Critique is a simple review platform with the power to do what you need.
-Version: 1.1.1
+Version: 1.1.3
 Author: Phillip Gooch
 Author URI: mailto:phillip.gooch@gmail.com
 License: Undecided
@@ -69,19 +69,19 @@ class critique {
 	public function admin_enqueued(){
 		// Load the admin scripts and styles where needed
 		// JS
-		wp_enqueue_script('critique_admin_js',plugin_dir_url( __FILE__ ).'/admin.js',array('jquery'));
+		wp_enqueue_script('critique_admin_js',plugin_dir_url( __FILE__ ).'admin.js');
 		// CSS
-		wp_enqueue_style('critique_admin_css',plugin_dir_url( __FILE__ ).'/admin.css');
+		wp_enqueue_style('critique_admin_css',plugin_dir_url( __FILE__ ).'admin.css');
 		wp_enqueue_style('critique_admin_css');
-		wp_enqueue_style('critique_admin_font_css',plugin_dir_url( __FILE__ ).'/fontello/css/critique.css');
+		wp_enqueue_style('critique_admin_font_css',plugin_dir_url( __FILE__ ).'fontello/css/critique.css');
 		wp_enqueue_style('critique_admin_font_css');
 	}
 	public function enqueued(){
 		// Load the regular scripts and styles where needed
 		// CSS
-		wp_enqueue_style('critique_font_css',plugin_dir_url( __FILE__ ).'/fontello/css/critique.css');
+		wp_enqueue_style('critique_font_css',plugin_dir_url( __FILE__ ).'fontello/css/critique.css');
 		wp_enqueue_style('critique_font_css');
-		wp_enqueue_style('critique_css',plugin_dir_url( __FILE__ ).'/critique.css');
+		wp_enqueue_style('critique_css',plugin_dir_url( __FILE__ ).'critique.css');
 		wp_enqueue_style('critique_css');
 	}
 

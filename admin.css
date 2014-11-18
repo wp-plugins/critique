@@ -18,6 +18,9 @@ td.critique-metabox-scale{
 td.critique-metabox-scale.type-5-stars .critique-admin-star-container{
 	font-size:17px;
 }
+td.critique-metabox-scale.type-5-stars .critique-admin-star-container .star{
+	cursor:pointer;
+}
 tr.overall-average-line{
 	opacity: .8
 }
@@ -25,6 +28,7 @@ td.critique-metabox-scale.type-out-of-100 .critique-admin-of100-bar{
 	height:20px;
 	background: #dfdfdf;
 	border-radius:2px;
+	cursor:pointer;
 }
 td.critique-metabox-scale.type-out-of-100 .critique-admin-of100-bar div{
 	background: #333;
