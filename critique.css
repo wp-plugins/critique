@@ -1,0 +1,76 @@
+/* General styles used by all score types */ 
+div.critique-display-wrapper{
+	text-align:center;
+	font-size:1.25em;
+}
+div.critique-display-wrapper ul#critique-display, div.critique-display-wrapper ul#critique-display li{
+	list-style: none!important;
+	margin: 0!important;
+	padding:0!important;
+}
+ul#critique-display li.critique-row{
+	margin: 0;
+	padding:0;
+	position: relative;
+}
+li.critique-row span.critique-numeric i{
+	font-size: .75em;
+	font-style: normal;
+	display: none;
+}
+
+/* The 5-star styles */
+div.type-5-stars ul#critique-display{
+	display: inline-table;
+}
+div.type-5-stars ul#critique-display li.critique-row{
+	display: table-row;
+}
+div.type-5-stars li.critique-row span{
+	padding:0em .2em;
+	display: table-cell;
+}
+div.type-5-stars li.critique-row span.critique-title{
+	text-align: right;
+}
+
+div.type-5-stars li.critique-row span.critique-numeric{
+	text-align: left;
+}
+div.type-5-stars .critique-scale .star.icon-star{
+	font-size:1.15em;
+}
+
+/* out-of-100 styles */
+div.type-out-of-100 #critique-display ul{
+	width: 100%;
+}
+div.type-out-of-100 .critique-title{
+	position:absolute;
+	color:#fff;
+	padding: .1em 0 0 .6em;
+	left:0;
+	top:0;
+}
+div.type-out-of-100 .critique-numeric{
+	position:absolute;
+	color:#fff;
+	padding: .1em .6em 0 0;
+	right:0;
+	top:0;
+	line-height: 1.75em;
+}
+div.type-out-of-100 .critique-scale{
+	width:100%;
+}
+div.type-out-of-100 .out-of-100-bar{
+	height:2em;
+	width:100%;
+	display: block;
+	background:#aaa;
+}
+div.type-out-of-100 .out-of-100-bar b{
+	height:2em;
+	display: block;
+	background:#666;
+}
