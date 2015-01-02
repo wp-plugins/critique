@@ -30,9 +30,8 @@
 				<td>
 					<fieldset>
 						<legend class="screen-reader-text"><span>Show full in short posts</span></legend>
-						<label for="show_options[full_in_short]">
-							<input type="hidden" name="show_options[full_in_short]" value="off" />
-							<input name="show_options[full_in_short]" type="checkbox" id="show_options[full_in_short]" value="on" <?= ($this->settings['show_options']['full_in_short']=='on'?'checked':'') ?> >
+						<label for="show_options_full_in_short">
+							<input name="show_options" type="radio" id="show_options_full_in_short" value="full_in_short" <?= ($this->settings['show_options']=='full_in_short'?'checked':'') ?> >
 							Show the full blog review block in excerpts or short posts (like on the blog homepage).
 						</label>
 					</fieldset>
@@ -43,15 +42,31 @@
 				<td>
 					<fieldset>
 						<legend class="screen-reader-text"><span>Show full in short posts</span></legend>
-						<label for="show_options[overall_in_short]">
-							<input type="hidden" name="show_options[overall_in_short]" value="off" />
-							<input name="show_options[overall_in_short]" type="checkbox" id="show_options[overall_in_short]" value="on" <?= ($this->settings['show_options']['overall_in_short']=='on'?'checked':'') ?> >
-							Show only the overall average in excerpts or  short posts (like on teh blog homepage). Overall averages must be enabled below.
+						<label for="show_options_overall_in_short">
+							<input name="show_options" type="radio" id="show_options_overall_in_short" value="overall_in_short" <?= ($this->settings['show_options']=='overall_in_short'?'checked':'') ?> >
+							Show only the overall average in excerpts or  short posts (like on the blog homepage). Overall averages must be enabled below.
+						</label>
+					</fieldset>
+				</td>
+			</tr>
+			<tr valign="top">
+				<th scope="row">Do not show score block</th>
+				<td>
+					<fieldset>
+						<legend class="screen-reader-text"><span>Do not show score block</span></legend>
+						<label for="show_options_do_not_show">
+							<input name="show_options" type="radio" id="show_options_do_not_show" value="do_not_show" <?= ($this->settings['show_options']=='do_not_show'?'checked':'') ?> >
+							You will need to insert a shortcode where you want the review block to show, see before for details on the shortcode.
 						</label>
 					</fieldset>
 				</td>
 			</tr>
 		</table>
+
+		<h3 class="title">Shortcode Information</h3>
+		<p> 
+			You can place a copy of the critique score box by using the shortcode <code>[critique_score]</code> in any post or page with a critique. If you would like to include the critique score box on another page, or would like to include a score box for a different review on a page you can pass the page ID attribute like this: <code>[critique_score page="123"]</code>. When using shortcodes you may want to opt not to show the default critique score box by selecting "Do not show score block" from the "Display Options" section above.
+		</p>
 
 		<h3 class="title">Review Settings</h3>
 		<p class="description">Changes to the review system are not retroactive, so if you go from a 5 Star system to a # out of 100 system critiques already made will still be 5 star. New sections are added, however they will be left blank, blank sections do not show up in the display and do not factor into the overall average.</p>

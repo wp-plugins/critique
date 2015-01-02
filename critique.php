@@ -3,7 +3,7 @@
 Plugin Name: Critique
 Plugin URI: http://fatfolderdesign.com/critique/
 Description: Critique is a simple review platform with the power to do what you need.
-Version: 1.1.3
+Version: 1.2.3
 Author: Phillip Gooch
 Author URI: mailto:phillip.gooch@gmail.com
 License: Undecided
@@ -43,11 +43,12 @@ class critique {
 			'add_average' => 'off',
 			'add_to_blog' => 'on',
 			'add_to_feed' => 'on',
-			'show_options' => array(
-				'full_in_short' => 'off',
-				'overall_in_short' => 'on',
-			),
+			'show_options' => 'overall_in_short',
 		),(array)$settings);
+		// Update settings that have changed over the versions (that kept the name but changes the formatting)
+		if(is_array($settings['show_options'])){
+			$settings['show_options'] = 'overall_in_short';
+		}
 		// Check any settings that need to be overridden (for whatever reason notes)
 		$this->settings = $settings;
 		// Add the settings menu item
@@ -64,6 +65,7 @@ class critique {
 		// These filters are used to add the critique data to the post 
 		add_filter('the_content',array($this,'add_to_post'));
 		add_filter('the_content_more_link',array($this,'post_more_link'),9001);
+		add_shortcode('critique_score',array($this,'critique_score_shortcode'));
 	}
 
 	public function admin_enqueued(){
@@ -81,7 +83,7 @@ class critique {
 		// CSS
 		wp_enqueue_style('critique_font_css',plugin_dir_url( __FILE__ ).'fontello/css/critique.css');
 		wp_enqueue_style('critique_font_css');
-		wp_enqueue_style('critique_css',plugin_dir_url( __FILE__ ).'critique.css');
+		wp_enqueue_style('critique_css',plugin_dir_url( __FILE__ ).'critique.css',array(),time());
 		wp_enqueue_style('critique_css');
 	}
 
@@ -212,10 +214,16 @@ class critique {
 		$this->more_link_length = strlen('<p>'.$link.'</p>'."\n");
 		return $link;
 	}
-	public function add_to_post($post){
+	public function add_to_post($post,$return_block_only=false){
 		// This adds the display block to the post
-		// First, load the data (and skip everything else if it's not there) and add the overall average is settings dictate
-    	$critique = json_decode(get_post_meta(get_the_ID(),'critique_score',true),true);
+		// If we were passed a number then were mostly there, just rename the var, otherwise we need to get the post ID for the meta load
+		if(is_int($post)){
+			$post_id = $post;
+		}else{
+			$post_id = get_the_ID();
+		}
+		// Load the data (and skip everything else if it's not there) and add the overall average is settings dictate
+    	$critique = json_decode(get_post_meta($post_id,'critique_score',true),true);
 		// Determine the overall if enabled and add if it is
  		if($this->settings['add_average']=='on'&&count($critique['review'])>1){
  			$total_score = 0;
@@ -242,23 +250,30 @@ class critique {
 				$post_type = 'short';
 				$display_block = false;
 			}
-			// If it's a short post pull we need to do some additional checking to determine what we display
-			if($post_type=='short'){
-				if($this->settings['show_options']['full_in_short']=='on'){
-					// We don't have to do anything
-					$display_block = true;
-				}else if($this->settings['show_options']['overall_in_short']=='on'){
-					// This is not an else if because if more options come up there probably each me there own thing, not all or nothing.
-					$display_block = true;
-	 				if($this->settings['add_average']=='on'&&count($critique['review'])>1&&$this->settings['show_options']['overall_in_short']=='on'){
-	 					$section = 0;
-	 					$sections = count($critique['review']);
-	 					foreach($critique['review'] as $k => $v){
-	 						$section++;
-	 						if($section!=$sections){
-	 							unset($critique['review'][$k]);
-	 						}
-	 					}
+			// We should check if were even going to show it at all (sans shortcode of course)
+			if($return_block_only){
+				$display_block = true;
+			}else if($this->settings['show_options']=='do_not_show'){
+				$display_block = false;
+			}else{
+				// If it's a short post pull we need to do some additional checking to determine what we display
+				if($post_type=='short'){
+					if($this->settings['show_options']=='full_in_short'){
+						// We don't have to do anything
+						$display_block = true;
+					}else if($this->settings['show_options']=='overall_in_short'){
+						// This is not an else if because if more options come up there probably each me there own thing, not all or nothing.
+						$display_block = true;
+		 				if($this->settings['add_average']=='on'&&count($critique['review'])>1&&$this->settings['show_options']=='overall_in_short'){
+		 					$section = 0;
+		 					$sections = count($critique['review']);
+		 					foreach($critique['review'] as $k => $v){
+		 						$section++;
+		 						if($section!=$sections){
+		 							unset($critique['review'][$k]);
+		 						}
+		 					}
+						}
 					}
 				}
 			}
@@ -306,7 +321,9 @@ class critique {
 				$critique_block = ob_get_clean();
 				// Wrap it in P tags, wordpress like to do that.
 				$critique_block = '<p>'.$critique_block.'</p>';
-				if($post_type=='long'){
+				if($return_block_only){
+					return $critique_block;
+				}else if($post_type=='long'){
 					$post .= $critique_block;
 				}else{ // $post_type == short
 					if($this->more_link_length==-1){
@@ -326,6 +343,19 @@ class critique {
 			update_post_meta($post_id,'critique_score',json_encode($_POST['critique_scorebox']));
 		}
 	}
+
+	public function critique_score_shortcode($attributes){
+		// Check for a provided post ID, if one is not provided then use the post global, if it is passed make sure it registers as an int.
+		if(!isset($attributes['post'])){
+			global $post;
+			$attributes['post'] = $post->ID;
+		}else{
+			$attributes['post'] = (int)$attributes['post'];
+		}
+		return $this->add_to_post($attributes['post'],true);
+	}
+
+
 	public function save_settings($save_options){
 		// This will take the existing settings, merge the update with them, then update both wordpress and the $this->settings var
 		$options=$this->settings;

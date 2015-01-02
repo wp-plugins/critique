@@ -3,10 +3,10 @@ div.critique-display-wrapper{
 	text-align:center;
 	font-size:1.25em;
 }
-ul#critique-display{
-	list-style: none;
-	margin: 0;
-	padding:0;
+div.critique-display-wrapper ul#critique-display, div.critique-display-wrapper ul#critique-display li{
+	list-style: none!important;
+	margin: 0!important;
+	padding:0!important;
 }
 ul#critique-display li.critique-row{
 	margin: 0;
@@ -42,7 +42,7 @@ div.type-5-stars .critique-scale .star.icon-star{
 }
 
 /* out-of-100 styles */
-div.type-out-of-100 ul{
+div.type-out-of-100 #critique-display ul{
 	width: 100%;
 }
 div.type-out-of-100 .critique-title{
@@ -58,6 +58,7 @@ div.type-out-of-100 .critique-numeric{
 	padding: .1em .6em 0 0;
 	right:0;
 	top:0;
+	line-height: 1.75em;
 }
 div.type-out-of-100 .critique-scale{
 	width:100%;
