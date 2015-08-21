@@ -3,7 +3,7 @@
 Plugin Name: Critique
 Plugin URI: http://fatfolderdesign.com/critique/
 Description: Critique is a simple review platform with the power to do what you need.
-Version: 1.2.3
+Version: 1.3.4
 Author: Phillip Gooch
 Author URI: mailto:phillip.gooch@gmail.com
 License: Undecided
@@ -233,12 +233,16 @@ class critique {
  				}
  				$total_score += (int)$score;
  			}
- 			$critique['review']['Overall'] = $total_score/count($critique['review']);
-			if($this->scales[$critique['scale']]['step']==0.5){
-				$critique['review']['Overall'] = round($critique['review']['Overall']*2)/2;
-			}else{
-				$critique['review']['Overall'] = round($critique['review']['Overall']);
-			}
+ 			if(count($critique['review'])>0){
+	 			$critique['review']['Overall'] = $total_score/count($critique['review']);
+				if($this->scales[$critique['scale']]['step']==0.5){
+					$critique['review']['Overall'] = round($critique['review']['Overall']*2)/2;
+				}else{
+					$critique['review']['Overall'] = round($critique['review']['Overall']);
+				}
+ 			}else{
+ 				$critique['review']['Overall'] = 0;
+ 			}
  		}
  		if(isset($critique['scale'])){
  			// Star the output buffer
@@ -264,19 +268,39 @@ class critique {
 					}else if($this->settings['show_options']=='overall_in_short'){
 						// This is not an else if because if more options come up there probably each me there own thing, not all or nothing.
 						$display_block = true;
-		 				if($this->settings['add_average']=='on'&&count($critique['review'])>1&&$this->settings['show_options']=='overall_in_short'){
-		 					$section = 0;
-		 					$sections = count($critique['review']);
-		 					foreach($critique['review'] as $k => $v){
-		 						$section++;
-		 						if($section!=$sections){
-		 							unset($critique['review'][$k]);
-		 						}
-		 					}
+						if(!is_singular()){
+			 				if($this->settings['add_average']=='on'&&count($critique['review'])>1&&$this->settings['show_options']=='overall_in_short'){
+			 					$section = 0;
+			 					$sections = count($critique['review']);
+			 					foreach($critique['review'] as $k => $v){
+			 						$section++;
+			 						if($section!=$sections){
+			 							unset($critique['review'][$k]);
+			 						}
+			 					}
+							}
 						}
 					}
 				}
 			}
+
+			// Display the Schema Microdata
+			if(isset($critique['review']['Overall'])){
+				echo '<div itemscope itemtype="http://schema.org/Review">';
+					echo '<div itemprop="author" itemscope itemtype="http://schema.org/Person">';
+						echo '<meta itemprop="name" content="'.get_the_author().'" />';
+					echo '</div>';
+					echo '<div itemprop="itemReviewed" itemscope itemtype="http://schema.org/Thing">';
+						echo '<meta itemprop="name" content="'.get_the_title().'" />';
+					echo '</div>';
+					echo '<div itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">';
+						echo '<meta itemprop="worstRating" content="0">';
+						echo '<meta itemprop="ratingValue" content="'.$critique['review']['Overall'].'">';
+						echo '<meta itemprop="bestRating" content="'.($critique['scale']=='5-stars'?'5':'100').'">';
+					echo '</div>';
+				echo '</div>';
+			}
+
 			// Display the block
 			if($display_block){
 				?>
@@ -285,7 +309,6 @@ class critique {
 						<?php foreach($critique['review'] as $scale => $value){ ?>
 							<li class="critique-row">
 								<span class="critique-title"><?= trim(($scale=='0'?'':$scale)) ?></span>
-								<span class="critique-scale">
 									<?php switch($critique['scale']){
 										case '5-stars':
 											for($star=1;$star<=$this->scales[$critique['scale']]['max'];$star++){
@@ -312,10 +335,10 @@ class critique {
 					</ul>
 				</div>
 				<?php
-				/* Debug Stuff 
-				echo '<pre>'.print_r($critique,true).'</pre>';
-				echo '<pre>'.print_r($this->settings,true).'</pre>';
-				var_dump($post,$this->more_link);
+				/* Debug Stuff */
+				#echo '<pre>'.print_r($critique,true).'</pre>';
+				#echo '<pre>'.print_r($this->settings,true).'</pre>';
+				#var_dump($post,$this->more_link);
 				/* End Debug */
 				// Get block and add it where needed.
 				$critique_block = ob_get_clean();

@@ -2,8 +2,8 @@
 Contributors: Phillip.Gooch
 Tags: reviews, scores, grades
 Requires at least: 3.4
-Tested up to: 4.1
-Stable tag: 1.2.3
+Tested up to: 4.3
+Stable tag: 1.3.4
 License: GNU General Public License v2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -52,6 +52,11 @@ Probably, let me know and I'll see if I can work it in there.
 
 == Changelog ==
 
+#### 1.3.4
+ + Confirmed WordPress 4.3 compatibility.
+ + Fixed a bug that could cause a divide by 0 notice to show.
+ + Fixed a bug that would cause it to render the overview on a single page when "Show overall average in short posts" was selected.
+ + Added (microdata)[https://schema.org/Review] for reviews if the Overall is enabled. Changes to this feature will be implemented based on feedback. 
 #### 1.2.3
  + Added support for shortcodes to display the critique score box and the option to disable the default score box placement.
 #### 1.1.3
